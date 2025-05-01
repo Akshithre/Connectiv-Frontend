@@ -321,7 +321,7 @@ const NewUserView = ({ onCreateProfile }) => {
             Business Owners
           </h2>
           <p className="mb-8 text-gray-600">
-            Join our Portal SME Investor Hub to accelerate your fund raise
+            Join our Portal Connectiv to accelerate your fund raise
             plans.
           </p>
 

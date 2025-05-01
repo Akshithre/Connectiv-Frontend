@@ -224,7 +224,7 @@ const handleLogin = async (e) => {
       <div className="flex items-center gap-8">
         <div className="flex items-center">
           <img src={logo} alt="HuBridge Logo" className="h-8 mr-2" />
-          <span className="text-2xl font-bold">SME-Investor Hub</span>
+          <span className="text-2xl font-bold">Connectiv</span>
         </div>
         <nav className="hidden md:flex gap-8">
           <a href="#" className="text-white hover:text-yellow-300">Home</a>
@@ -235,13 +235,13 @@ const handleLogin = async (e) => {
       <div className="flex items-center gap-4">
         <div className="flex items-center mr-4">
         <Phone className="h-5 mr-2" /> 
-        <span>(+91)-9163681066</span>
+        <span>(+91)-9999999999</span>
         </div>
     
         <div className="flex items-center gap-4">
         <div className="flex items-center mr-4">
         <Mail className="h-5 mr-2" />
-        <span>info@smeinvestorshub.com</span>
+        <span>spam@gmail.com</span>
         </div>
         </div>
 
@@ -384,14 +384,14 @@ const handleLogin = async (e) => {
         <section id="how-it-works" className="bg-gradient-to-br from-green-50 to-green-50 py-20 px-6">
   <div className="max-w-7xl mx-auto">
     <div className="text-center mb-16">
-      <h2 className="text-4xl font-bold text-emerald-800 mb-4">SME-Investor Hub</h2>
+      <h2 className="text-4xl font-bold text-emerald-800 mb-4">Connectiv</h2>
       <p className="text-lg text-emerald-800">Connecting Business Owners and Private Investors</p>
     </div>
 
     <div className="grid md:grid-cols-2 gap-8 lg:gap-16">
       <div className="bg-white border-2 border-emerald-800 rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
         <h3 className="text-2xl font-bold text-emerald-800 mb-6">Business Owners</h3>
-        <p className="mb-12">Join our Portal <span className="font-semibold">SME-Investor Hub</span> to accelerate your fund raise plans.</p>
+        <p className="mb-12">Join our Portal <span className="font-semibold">Connectiv</span> to accelerate your fund raise plans.</p>
 
         <div className="relative flex flex-col items-center space-y-3">
           {[
@@ -433,7 +433,7 @@ const handleLogin = async (e) => {
 
       <div className="bg-white border-2 border-emerald-800 rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
         <h3 className="text-2xl font-bold text-emerald-800 mb-6">Private Investors</h3>
-        <p className="mb-12">Join our Portal <span className="font-semibold">SME-Investor Hub</span> to invest in profitable businesses</p>
+        <p className="mb-12">Join our Portal <span className="font-semibold">Connectiv</span> to invest in profitable businesses</p>
 
         <div className="relative flex flex-col items-center space-y-3">
           {[
@@ -483,11 +483,11 @@ const handleLogin = async (e) => {
               <div>
                 <img src={logo} alt="HuBridge Logo" className="h-8 mb-6" />
                 <p className="text-gray-400 text-sm">
-                SME-Investor Hub is a trusted partner in business funding/exits, private investments and M&A opportunities 
+                Connectiv is a trusted partner in business funding/exits, private investments and M&A opportunities 
                 to both business owners and private investors<br></br><br></br>
                 </p>
                 <p className="text-gray-400 text-sm">
-                SME-Investor Hub, is a technology/business initiative of Hubridge Financial and Business Partners.
+                Connectiv, is a technology/business initiative of Hubridge Financial and Business Partners.
                 </p>
               </div>
               <div>
@@ -524,8 +524,8 @@ const handleLogin = async (e) => {
               <div>
                 <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li>Email: contact@SMEinvestorshub.com</li>
-                  <li>Phone: (+91)-9163681066</li>
+                  <li>Email: spam@gmail</li>
+                  <li>Phone: (+91)-9999999999</li>
           
                 </ul>
               </div>

@@ -24,7 +24,7 @@ const Navbar = () => {
                 {/* Logo and Branding */}
                 <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/home')}>
                     <img src={logo} alt="Company Logo" className="h-12" />
-                    <span className="text-2xl font-bold hover:text-yellow-300 transition-colors">SME-Investor Hub</span>
+                    <span className="text-2xl font-bold hover:text-yellow-300 transition-colors">Connectiv</span>
                 </div>
 
                 {/* Navigation Links */}

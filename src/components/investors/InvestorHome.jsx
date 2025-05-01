@@ -145,13 +145,12 @@ const InvestorProfileCard = ({ investor, onEdit, onDelete }) => (
   </div>
 );
 
-const BusinessConnectCard = ({ business, type }) => {
+const BusinessConnectCard = ({ business, onStatusChange }) => {
   const navigate = useNavigate();
   const { userDetails } = useAuth();
   const [investors, setInvestors] = useState([]);
   const [showStatusConfirm, setShowStatusConfirm] = useState(false);
   const [pendingStatus, setPendingStatus] = useState('');
-  const [currentValue, setCurrentValue] = useState(business.filter || '');
 
   useEffect(() => {
     const fetchInvestors = async () => {
@@ -217,7 +216,6 @@ const BusinessConnectCard = ({ business, type }) => {
 
   const handleConfirmStatusChange = () => {
     onStatusChange(business._id, pendingStatus);
-    setCurrentValue(pendingStatus);
     setShowStatusConfirm(false);
     toast.success('Status updated successfully');
   };
@@ -225,7 +223,6 @@ const BusinessConnectCard = ({ business, type }) => {
   const handleCancelStatusChange = () => {
     setShowStatusConfirm(false);
   };
-
 
   const getLatestFinancials = () => {
     if (!business.ebitdaValuation) return { year: null, revenue: null, ebitda: null };
@@ -270,31 +267,31 @@ const BusinessConnectCard = ({ business, type }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-8">
-        {/* Add dropdown at top right */}
-        <div className="flex justify-between items-start mb-4">
+      {/* Add dropdown at top right */}
+      <div className="flex justify-between items-start mb-4">
         <h3 className="text-xl font-semibold text-gray-900">
           {business.businessLegalName || 'Unnamed Business'}
         </h3>
         <select
-  className="ml-4 px-3 py-1 border rounded-md text-sm text-gray-700"
-  value={business.filter || ''}
-  onChange={(e) => handleStatusChangeClick(e.target.value)}
->
-  <option value="">Active Business</option>
-  <option value="due-diligence">Due Diligence</option>
-  <option value="negotiated">Negotiated & Closed</option>
-</select>
+          className="ml-4 px-3 py-1 border rounded-md text-sm text-gray-700"
+          value={business.filter || ''}
+          onChange={(e) => handleStatusChangeClick(e.target.value)}
+        >
+          <option value="">Active Business</option>
+          <option value="due-diligence">Due Diligence</option>
+          <option value="negotiated">Negotiated & Closed</option>
+        </select>
       </div>
 
-    {/* Confirmation Modal */}
-    {showStatusConfirm && (
+      {/* Confirmation Modal */}
+      {showStatusConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-96 shadow-xl">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Change Business Status
             </h3>
             <p className="text-gray-600 mb-6">
-            Are you sure you wish to change the state to "{getStatusDisplayName(pendingStatus)}"?
+              Are you sure you wish to change the state to "{getStatusDisplayName(pendingStatus)}"?
             </p>
             <div className="flex justify-end gap-4">
               <button
@@ -315,11 +312,9 @@ const BusinessConnectCard = ({ business, type }) => {
       )}    
       
       {/* Header */}
-      {/* <div className="mb-4"> */}
-        <p className="text-gray-500 mt-2">
-          Last Updated on: {formattedDate}
-        </p>
-      {/* </div> */}
+      <p className="text-gray-500 mt-2">
+        Last Updated on: {formattedDate}
+      </p>
 
       {/* Description */}
       <div className="text-gray-700 mb-6">
@@ -371,6 +366,7 @@ const BusinessConnectCard = ({ business, type }) => {
     </div>
   );
 };
+
 const InvestorHome = () => {
   const navigate = useNavigate();
   const [investors, setInvestors] = useState([]);
@@ -378,16 +374,15 @@ const InvestorHome = () => {
   const [error, setError] = useState(null);
   const { userDetails } = useAuth();
   const [connectedBusinesses, setConnectedBusinesses] = useState([]);
-  const [transactionBusinesses, setTransactionBusinesses] = useState([]);
-  const [deleteConfirmation, setDeleteConfirmation] = useState({
-    isOpen: false,
-    investorId: null,
-    fullName: "",
-  });
   const [filteredBusinesses, setFilteredBusinesses] = useState({
     inProgress: [],
     dueDiligence: [],
     negotiated: []
+  });
+  const [deleteConfirmation, setDeleteConfirmation] = useState({
+    isOpen: false,
+    investorId: null,
+    fullName: "",
   });
 
   useEffect(() => {
@@ -395,6 +390,8 @@ const InvestorHome = () => {
       fetchInvestors();
     }
   }, [userDetails]);
+
+  // Updated useEffect to categorize businesses whenever connectedBusinesses changes
   useEffect(() => {
     if (connectedBusinesses.length > 0) {
       const categorizedBusinesses = {
@@ -456,6 +453,7 @@ const InvestorHome = () => {
       fullName
     });
   };
+
   const fetchBusinessDetails = async (proposalId) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/business-proposal/get-proposal/${proposalId}`);
@@ -467,6 +465,7 @@ const InvestorHome = () => {
       return null;
     }
   };
+
   const fetchTransactionBusinesses = async (investorId) => {
     try {
       // First, fetch all transactions for the investor
@@ -519,6 +518,7 @@ const InvestorHome = () => {
       return [];
     }
   };
+
   useEffect(() => {
     const fetchAllBusinessDetails = async () => {
       if (!investors.length) return;
@@ -538,15 +538,13 @@ const InvestorHome = () => {
               .map(payment => fetchBusinessDetails(payment.proposalId))
           )
         );
-        console.log('Transaction Results:', transactionResults);
-      console.log('Owner Connected Results:', ownerConnectedResults);
 
         // Combine the owner-connected and transaction-connected businesses
         const allBusinesses = [
           ...ownerConnectedResults.filter(business => business !== null),
           ...transactionResults.flat().filter(business => business !== null)
         ];
-        console.log('All Businesses:', allBusinesses);
+        
         // Set the combined business data
         setConnectedBusinesses(allBusinesses);
       } catch (error) {
@@ -591,23 +589,6 @@ const InvestorHome = () => {
     }
   };
 
-  if (!userDetails?.userId || loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <NavbarInvestor />
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
-  if (!error && investors.length === 0) {
-    return (
-      <div className="min-h-screen">
-        <NavbarInvestor />
-        <NewInvestorView onCreateProfile={handleCreateProfile} />
-      </div>
-    );
-  }
   const handleFindBusiness = () => {
     if (investors.length === 0) {
       toast.error("Please complete your investor profile first");
@@ -619,7 +600,8 @@ const InvestorHome = () => {
     });
   };
 
-  const handleStatusChange = async (businessId,newStatus) => {
+  // Updated handleStatusChange to update the business in connectedBusinesses array
+  const handleStatusChange = async (businessId, newStatus) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/business-proposal/update-proposal`, {
         method: 'POST',
@@ -638,11 +620,14 @@ const InvestorHome = () => {
 
       const data = await response.json();
       if (data.status) {
+        // Update the local state with the new status
         const updatedBusinesses = connectedBusinesses.map(business => 
           business._id === businessId 
             ? { ...business, filter: newStatus }
             : business
         );
+        
+        // This will trigger the useEffect that updates filteredBusinesses
         setConnectedBusinesses(updatedBusinesses);
       }
     } catch (error) {
@@ -650,6 +635,24 @@ const InvestorHome = () => {
       toast.error('Failed to update status');
     }
   };
+
+  if (!userDetails?.userId || loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <NavbarInvestor />
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (!error && investors.length === 0) {
+    return (
+      <div className="min-h-screen">
+        <NavbarInvestor />
+        <NewInvestorView onCreateProfile={handleCreateProfile} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -740,64 +743,48 @@ const InvestorHome = () => {
                     </button>
                   </div>
 
-                  {connectedBusinesses.length === 0 ? (
-        null
-      ) : (
-        <>
-          {/* Owner Connected Businesses */}
-          {connectedBusinesses.filter(b => !b.filter).map((business, index) => (
-            <BusinessConnectCard
-              key={`owner-${index}`}
-              business={business}
-              type="owner-connected"
-              onStatusChange={handleStatusChange}
-            />
-          ))}
-
-          {/* Transaction Connected Businesses */}
-          {transactionBusinesses.map((business, index) => (
-            <BusinessConnectCard
-              key={`transaction-${business.transactionId || index}`}
-              business={business}
-              type="investor-connected"
-              onStatusChange={handleStatusChange}
-            />
-          ))}
-        </>
-                  )}
+                  {/* Only show active businesses (no filter) in this column */}
+                  {filteredBusinesses.inProgress.map((business) => (
+                    <BusinessConnectCard
+                      key={business._id || business.transactionId}
+                      business={business}
+                      onStatusChange={handleStatusChange}
+                    />
+                  ))}
                 </div>
               )}
             </div>
 
             <div>
-  <StepHeader number="3" title="Perform Due Diligence" />
-  <div className="space-y-4">
-    {filteredBusinesses.dueDiligence.map((business) => (
-      <BusinessConnectCard
-        key={business._id}
-        business={business}
-        type="owner-connected"
-        onStatusChange={handleStatusChange}
-      />
-    ))}
-  </div>
-</div>
+              <StepHeader number="3" title="Perform Due Diligence" />
+              <div className="space-y-4">
+                {/* Only show businesses with due-diligence filter in this column */}
+                {filteredBusinesses.dueDiligence.map((business) => (
+                  <BusinessConnectCard
+                    key={business._id || business.transactionId}
+                    business={business}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))}
+              </div>
+            </div>
 
-<div>
-  <StepHeader number="4" title="Negotiate and Close" />
-  <div className="space-y-4">
-    {filteredBusinesses.negotiated.map((business) => (
-      <BusinessConnectCard
-        key={business._id}
-        business={business}
-        type="owner-connected"
-        onStatusChange={handleStatusChange}
-      />
-    ))}
-  </div>
-</div>
+            <div>
+              <StepHeader number="4" title="Negotiate and Close" />
+              <div className="space-y-4">
+                {/* Only show businesses with negotiated filter in this column */}
+                {filteredBusinesses.negotiated.map((business) => (
+                  <BusinessConnectCard
+                    key={business._id || business.transactionId}
+                    business={business}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
+
 
         {deleteConfirmation.isOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

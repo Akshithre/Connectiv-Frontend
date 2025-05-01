@@ -505,7 +505,85 @@ const ProposalVersionCard = ({ proposal, version, proposalId, onStatusUpdate }) 
   const navigate = useNavigate();
   const [showHoldModal, setShowHoldModal] = useState(false);
   const [localVersion, setLocalVersion] = useState(version);
+  const [valuationData, setValuationData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchValuation = async () => {
+      try {
+        console.log(`proposal id at fetch valuation ${proposalId}`);
+        const response = await fetch(
+          `${API_BASE_URL}/api/business-proposal/get-proposal/${proposalId}`
+        );
+        const data = await response.json();
+        if (data.status) {
+          setValuationData(data.data);
+        }
+      } catch (err) {
+        console.error("Error fetching valuation:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchValuation();
+  }, [proposalId]);
+
+  const getLastFYData = (dataObj) => {
+    if (!dataObj || typeof dataObj !== 'object') return "0";
+    
+    // Filter out non-year keys (like other properties that might be in the object)
+    const years = Object.keys(dataObj).filter(key => /^\d{4}$/.test(key));
+    
+    // If no valid years, return 0
+    if (years.length === 0) return "0";
+    
+    // Get the latest year by sorting numerically
+    const latestYear = years.sort((a, b) => parseInt(b) - parseInt(a))[0];
+    
+    return dataObj[latestYear] || "0";
+  };
+
+  const getLastFYRevenue = () => {
+    if (!valuationData) return "0";
+    
+    // Check valuation type and use appropriate data
+    const valuationType = valuationData.valuationType || "ebitda";
+    
+    if (valuationType === "dcf") {
+      // Use DCF valuation data
+      if (!valuationData.dcfValuation || !valuationData.dcfValuation.revenue) {
+        return "0";
+      }
+      return getLastFYData(valuationData.dcfValuation.revenue);
+    } else {
+      // Default to EBITDA valuation data
+      if (!valuationData.ebitdaValuation || !valuationData.ebitdaValuation.revenue) {
+        return "0";
+      }
+      return getLastFYData(valuationData.ebitdaValuation.revenue);
+    }
+  };
+
+  const getLastFYEbitda = () => {
+    if (!valuationData) return "0";
+    
+    // Check valuation type and use appropriate data
+    const valuationType = valuationData.valuationType || "ebitda";
+    
+    if (valuationType === "dcf") {
+      // Use DCF valuation data
+      if (!valuationData.dcfValuation || !valuationData.dcfValuation.ebitda) {
+        return "0";
+      }
+      return getLastFYData(valuationData.dcfValuation.ebitda);
+    } else {
+      // Default to EBITDA valuation data
+      if (!valuationData.ebitdaValuation || !valuationData.ebitdaValuation.ebitda) {
+        return "0";
+      }
+      return getLastFYData(valuationData.ebitdaValuation.ebitda);
+    }
+  };
   const getInvestmentOffer = () => {
     if (localVersion.proposalType === "Equity Funding") {
       const fundingValue =
@@ -596,11 +674,11 @@ const ProposalVersionCard = ({ proposal, version, proposalId, onStatusUpdate }) 
       <div className="space-y-2 mb-4">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Revenue (Last FY):</span>
-          <span className="font-medium">INR 0</span>
+          <span className="font-medium">INR {loading ? "Loading..." : getLastFYRevenue()}</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">EBITDA (Last FY):</span>
-          <span className="font-medium">INR 0</span>
+          <span className="font-medium">INR {loading ? "Loading..." : getLastFYEbitda()}</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Interests Received:</span>
@@ -632,7 +710,7 @@ const ProposalVersionCard = ({ proposal, version, proposalId, onStatusUpdate }) 
           className="bg-green-700 hover:bg-green-600 px-4 py-2 rounded transition-colors text-white"
         >
           Edit proposal
-          Edit proposal
+ 
         </button>
       </div>
 

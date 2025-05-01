@@ -64,7 +64,7 @@ const contactus = () => {
                   />
                 </svg>
                 <span className="text-gray-600 text-lg">
-                info@smeinvestorshub.com
+                spam@gmail.com
                 </span>
               </div>
               <div className="flex items-center gap-3">

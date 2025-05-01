@@ -733,7 +733,7 @@ const TermsAndConditions = ({ formData, setFormData, errors }) => (
       />
       <div className="flex flex-col">
         <label htmlFor="terms" className="text-sm text-gray-600">
-          I accept the terms and conditions and authorize <span className="font-semibold">SMEInvestorHub</span> to contact me further for information and business transactions.
+          I accept the terms and conditions and authorize <span className="font-semibold">Connectiv</span> to contact me further for information and business transactions.
         </label>
         {errors?.termsAccepted && (
           <p className="text-red-500 text-xs mt-1">Please accept the terms and conditions</p>

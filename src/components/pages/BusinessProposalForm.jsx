@@ -559,10 +559,10 @@ const DocumentUpload = ({ formData, setFormData, pendingUploads, setPendingUploa
     }
 
     // Update pending uploads
-    setPendingUploads(prev => ({
-      ...prev,
-      [fieldName]: [...(prev[fieldName] || []), ...files]
-    }));
+    // setPendingUploads(prev => ({
+    //   ...prev,
+    //   [fieldName]: [...(prev[fieldName] || []), ...files]
+    // }));
 
     // Create file entries with names
     const newFileEntries = files.map(file => ({
@@ -584,14 +584,14 @@ const DocumentUpload = ({ formData, setFormData, pendingUploads, setPendingUploa
     const fileToRemove = formData[fieldName][index];
     
     // If it's a new file, remove from pending uploads
-    if (fileToRemove.isNew) {
-      setPendingUploads(prev => ({
-        ...prev,
-        [fieldName]: (prev[fieldName] || []).filter((_, i) => 
-          prev[fieldName][i].name !== fileToRemove.name
-        )
-      }));
-    }
+    // if (fileToRemove.isNew) {
+    //   setPendingUploads(prev => ({
+    //     ...prev,
+    //     [fieldName]: (prev[fieldName] || []).filter((_, i) => 
+    //       prev[fieldName][i].name !== fileToRemove.name
+    //     )
+    //   }));
+    // }
 
     // Remove from form data
     setFormData(prev => ({
@@ -793,11 +793,11 @@ const BusinessProposalForm = () => {
     primaryEmail: false,
     termsAccepted: false 
   });
-  const [pendingUploads, setPendingUploads] = useState({
-    businessPhotos: null,
-    legalDocs: null,
-    marketingDocs: null
-  });
+  // const [pendingUploads, setPendingUploads] = useState({
+  //   businessPhotos: null,
+  //   legalDocs: null,
+  //   marketingDocs: null
+  // });
   
   const [formData, setFormData] = useState({
     userId: userDetails?.userId || '',
@@ -819,9 +819,9 @@ const BusinessProposalForm = () => {
     monthlySales: '',
     totalAssets: '',
     totalLiabilities: '',
-    businessPhotos: [], // Initialize as empty array
-  legalDocs: [], // Initialize as empty array
-  marketingDocs: [],
+  //   businessPhotos: [], // Initialize as empty array
+  // legalDocs: [], // Initialize as empty array
+  // marketingDocs: [],
     termsAccepted: false
   });
 
@@ -852,51 +852,51 @@ const BusinessProposalForm = () => {
       setProposalData(fetchedProposal);
 
       // Process documents from backend
-      const processDocuments = (documents, type) => {
-        const typeMapping = {
-            "businessPhoto": "business_photo",
-            "legaldoc": "legal_doc",
-            "marketingDocs": "market_doc",
-            "business_photo": "business_photo",
-            "legal_doc": "legal_doc",
-            "market_doc": "market_doc"
-        };
+    //   const processDocuments = (documents, type) => {
+    //     const typeMapping = {
+    //         "businessPhoto": "business_photo",
+    //         "legaldoc": "legal_doc",
+    //         "marketingDocs": "market_doc",
+    //         "business_photo": "business_photo",
+    //         "legal_doc": "legal_doc",
+    //         "market_doc": "market_doc"
+    //     };
     
-        if (!documents || !Array.isArray(documents)) {
-            console.log('No documents or invalid documents array');
-            return [];
-        }
+    //     if (!documents || !Array.isArray(documents)) {
+    //         console.log('No documents or invalid documents array');
+    //         return [];
+    //     }
     
-        const backendType = typeMapping[type] || type;
+    //     const backendType = typeMapping[type] || type;
     
-        console.log('Processing documents:', {
-            documents,
-            requestedType: type,
-            mappedType: backendType,
-            documentTypes: documents.map(doc => doc.type)
-        });
+    //     console.log('Processing documents:', {
+    //         documents,
+    //         requestedType: type,
+    //         mappedType: backendType,
+    //         documentTypes: documents.map(doc => doc.type)
+    //     });
     
-        const filteredDocs = documents.filter(doc => {
-            const match = doc.type === backendType;
-            if (!match) {
-                console.log(`Type mismatch - Document type: ${doc.type}, Looking for: ${backendType}`);
-            }
-            return match;
-        });
+    //     const filteredDocs = documents.filter(doc => {
+    //         const match = doc.type === backendType;
+    //         if (!match) {
+    //             console.log(`Type mismatch - Document type: ${doc.type}, Looking for: ${backendType}`);
+    //         }
+    //         return match;
+    //     });
     
-        console.log('Filtered documents:', filteredDocs);
+    //     console.log('Filtered documents:', filteredDocs);
     
-        const processedDocs = filteredDocs.map(doc => ({
-          preview: doc.file,
-          file: doc.file,
-          type: type === "businessPhoto" || type === "business_photo" ? 'image' : 'document',
-          name: doc.file.split('/').pop(),
-          isNew: false // Mark as existing document
-      }));
+    //     const processedDocs = filteredDocs.map(doc => ({
+    //       preview: doc.file,
+    //       file: doc.file,
+    //       type: type === "businessPhoto" || type === "business_photo" ? 'image' : 'document',
+    //       name: doc.file.split('/').pop(),
+    //       isNew: false // Mark as existing document
+    //   }));
     
-        console.log('Processed documents:', processedDocs);
-        return processedDocs;
-    };
+    //     console.log('Processed documents:', processedDocs);
+    //     return processedDocs;
+    // };
 
       // Create a single processed form data object
       const processedFormData = {
@@ -920,9 +920,9 @@ const BusinessProposalForm = () => {
         totalAssets: fetchedProposal.totalAssets || '',
         totalLiabilities: fetchedProposal.totalLiabilities || '',
         termsAccepted: Boolean(fetchedProposal.termsAccepted),
-        businessPhotos: processDocuments(fetchedProposal.documents, "business_photo"),
-        legalDocs: processDocuments(fetchedProposal.documents, "legal_doc"),
-        marketingDocs: processDocuments(fetchedProposal.documents, "market_doc")
+        // businessPhotos: processDocuments(fetchedProposal.documents, "business_photo"),
+        // legalDocs: processDocuments(fetchedProposal.documents, "legal_doc"),
+        // marketingDocs: processDocuments(fetchedProposal.documents, "market_doc")
       };
 
       // Update form data
@@ -932,11 +932,11 @@ const BusinessProposalForm = () => {
       setInitialFormData(JSON.parse(JSON.stringify(processedFormData)));
 
       // Update context with fresh data
-      setBusinessProposal(prev => ({
-        ...prev,
-        ...fetchedProposal,
-        documents: fetchedProposal.documents || []
-      }));
+      // setBusinessProposal(prev => ({
+      //   ...prev,
+      //   ...fetchedProposal,
+      //   documents: fetchedProposal.documents || []
+      // }));
 
       setHasUnsavedChanges(false);
 
@@ -947,157 +947,7 @@ const BusinessProposalForm = () => {
       setIsFetching(false);
     }
   };
-  // const fetchProposalData = async (proposalId) => {
-  //   setIsFetching(true);
-  //   setError('');
-    
-  //   try {
-  //     const response = await fetch(`${API_BASE_URL}/api/business-proposal/get-proposal/${proposalId}`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         // Add any authentication headers if needed
-  //       }
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error(`Failed to fetch proposal: ${response.statusText}`);
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log('Response data:', JSON.stringify(responseData, null, 2));
-
-      
-  //     if (!responseData.status || !responseData.data) {
-  //       throw new Error(responseData.message || 'Failed to fetch proposal data');
-  //     }
-
-  //     const fetchedProposal = responseData.data;
-  //     setProposalData(fetchedProposal);
-
-  //     // Process documents from backend
-  //     const processDocuments = (documents, type) => {
-  //       // Create a mapping for type matching
-  //       const typeMapping = {
-  //           "businessPhoto": "business_photo",
-  //           "legaldoc": "legal_doc",
-  //           "marketingDocs": "market_doc",
-  //           // Include direct mappings for backward compatibility
-  //           "business_photo": "business_photo",
-  //           "legal_doc": "legal_doc",
-  //           "market_doc": "market_doc"
-  //       };
-    
-  //       if (!documents || !Array.isArray(documents)) {
-  //           console.log('No documents or invalid documents array');
-  //           return [];
-  //       }
-    
-  //       // Get the correct backend type
-  //       const backendType = typeMapping[type] || type;
-    
-  //       console.log('Processing documents:', {
-  //           documents,
-  //           requestedType: type,
-  //           mappedType: backendType,
-  //           documentTypes: documents.map(doc => doc.type) // Log all document types for debugging
-  //       });
-    
-  //       const filteredDocs = documents.filter(doc => {
-  //           const match = doc.type === backendType;
-  //           if (!match) {
-  //               console.log(`Type mismatch - Document type: ${doc.type}, Looking for: ${backendType}`);
-  //           }
-  //           return match;
-  //       });
-    
-  //       console.log('Filtered documents:', filteredDocs);
-    
-  //       const processedDocs = filteredDocs.map(doc => ({
-  //           preview: doc.file,
-  //           file: doc.file,
-  //           type: type === "businessPhoto" || type === "business_photo" ? 'image' : 'document',
-  //           name: doc.file.split('/').pop()
-  //       }));
-    
-  //       console.log('Processed documents:', processedDocs);
-    
-  //       return processedDocs;
-  //   };
-
-  //     // Update form data with fetched data
-  //     setFormData(prev => ({
-  //       ...prev,
-  //       userId: fetchedProposal.userId || userDetails?.userId || '',
-  //       personalName: fetchedProposal.personalName || '',
-  //       businessLegalName: fetchedProposal.businessLegalName || '',
-  //       mobileNo: fetchedProposal.mobileNo || '',
-  //       primaryEmail: fetchedProposal.primaryEmail || '',
-  //       designation: fetchedProposal.designation || '',
-  //       legalEntityType: fetchedProposal.legalEntityType || '',
-  //       establishedYear: fetchedProposal.establishedYear || '',
-  //       businessLocation: fetchedProposal.businessLocation || '',
-  //       industry: fetchedProposal.industry || '',
-  //       shortBusinessDesc: fetchedProposal.shortBusinessDesc || '',
-  //       businessDesc: fetchedProposal.businessDesc || '',
-  //       keyProducts: fetchedProposal.keyProducts || '',
-  //       businessStrengths: fetchedProposal.businessStrengths || '',
-  //       annualSales: fetchedProposal.annualSales || '',
-  //       annualEBITDA: fetchedProposal.annualEBITDA || '',
-  //       monthlySales: fetchedProposal.monthlySales || '',
-  //       totalAssets: fetchedProposal.totalAssets || '',
-  //       totalLiabilities: fetchedProposal.totalLiabilities || '',
-  //       termsAccepted: Boolean(fetchedProposal.termsAccepted),
-  //       // Process documents by type
-  //       businessPhotos: processDocuments(fetchedProposal.documents, "business_photo"),
-  //       legalDocs: processDocuments(fetchedProposal.documents, "legal_doc"),
-  //       marketingDocs: processDocuments(fetchedProposal.documents, "market_doc")
-    
-  //     }));
-
-  //     // Update context with fresh data
-  //     setBusinessProposal(prev => ({
-  //       ...prev,
-  //       ...fetchedProposal,
-  //       documents: fetchedProposal.documents || []
-  //     }));
-  //     setInitialFormData(prev => ({
-  //       ...prev,
-  //       userId: fetchedProposal.userId || userDetails?.userId || '',
-  //       personalName: fetchedProposal.personalName || '',
-  //       // ... rest of your form fields
-  //       businessLegalName: fetchedProposal.businessLegalName || '',
-  //       mobileNo: fetchedProposal.mobileNo || '',
-  //       primaryEmail: fetchedProposal.primaryEmail || '',
-  //       designation: fetchedProposal.designation || '',
-  //       legalEntityType: fetchedProposal.legalEntityType || '',
-  //       establishedYear: fetchedProposal.establishedYear || '',
-  //       businessLocation: fetchedProposal.businessLocation || '',
-  //       industry: fetchedProposal.industry || '',
-  //       shortBusinessDesc: fetchedProposal.shortBusinessDesc || '',
-  //       businessDesc: fetchedProposal.businessDesc || '',
-  //       keyProducts: fetchedProposal.keyProducts || '',
-  //       businessStrengths: fetchedProposal.businessStrengths || '',
-  //       annualSales: fetchedProposal.annualSales || '',
-  //       annualEBITDA: fetchedProposal.annualEBITDA || '',
-  //       monthlySales: fetchedProposal.monthlySales || '',
-  //       totalAssets: fetchedProposal.totalAssets || '',
-  //       totalLiabilities: fetchedProposal.totalLiabilities || '',
-  //       termsAccepted: Boolean(fetchedProposal.termsAccepted),
-  //       // Process documents by type
-  //       businessPhotos: processDocuments(fetchedProposal.documents, "business_photo"),
-  //       legalDocs: processDocuments(fetchedProposal.documents, "legal_doc"),
-  //       marketingDocs: processDocuments(fetchedProposal.documents, "market_doc")
-  //     }));
-  //     setHasUnsavedChanges(false);
-  //   } catch (err) {
-  //     console.error('Error fetching proposal:', err);
-  //     setError(err.message || 'Failed to fetch proposal data. Please try again.');
-  //   } finally {
-  //     setIsFetching(false);
-  //   }
-  // };
-
+  
 // Effect to fetch proposal data if ID is available
 useEffect(() => {
   const proposalId = location.state?.proposalId;
@@ -1193,40 +1043,40 @@ const handleSave = async (e) => {
 
   setIsLoading(true);
   try {
-    const documents = [];
+    // const documents = [];
     
-    const uploadTypes = {
-      businessPhotos: "business_photo",
-      legalDocs: "legal_doc",
-      marketingDocs: "market_doc"
-    };
+    // const uploadTypes = {
+    //   businessPhotos: "business_photo",
+    //   legalDocs: "legal_doc",
+    //   marketingDocs: "market_doc"
+    // };
 
-    for (const [fieldName, docType] of Object.entries(uploadTypes)) {
-      const existingDocs = formData[fieldName]?.filter(doc => !doc.isNew) || [];
-      existingDocs.forEach(doc => {
-        if (doc.file) {
-          documents.push({
-            type: docType,
-            file: doc.file
-          });
-        }
-      });
-    }
+    // for (const [fieldName, docType] of Object.entries(uploadTypes)) {
+    //   const existingDocs = formData[fieldName]?.filter(doc => !doc.isNew) || [];
+    //   existingDocs.forEach(doc => {
+    //     if (doc.file) {
+    //       documents.push({
+    //         type: docType,
+    //         file: doc.file
+    //       });
+    //     }
+    //   });
+    // }
 
     // Then handle new uploads
-    for (const [uploadKey, docType] of Object.entries(uploadTypes)) {
-      if (pendingUploads[uploadKey]?.length) {
-        for (const file of pendingUploads[uploadKey]) {
-          const uploadResult = await uploadToS3(file);
-          if (uploadResult.success) {
-            documents.push({
-              type: docType,
-              file: uploadResult.url
-            });
-          }
-        }
-      }
-    }
+    // for (const [uploadKey, docType] of Object.entries(uploadTypes)) {
+    //   if (pendingUploads[uploadKey]?.length) {
+    //     for (const file of pendingUploads[uploadKey]) {
+    //       const uploadResult = await uploadToS3(file);
+    //       if (uploadResult.success) {
+    //         documents.push({
+    //           type: docType,
+    //           file: uploadResult.url
+    //         });
+    //       }
+    //     }
+    //   }
+    // }
 
     const dataToSend = {
       userId: formData.userId,
@@ -1249,7 +1099,7 @@ const handleSave = async (e) => {
       totalAssets: formData.totalAssets || 0,
       totalLiabilities: formData.totalLiabilities || 0,
       termsAccepted: formData.termsAccepted,
-      documents: documents
+      // documents: documents
     };
 
     const proposalId = location.state?.proposalId;
@@ -1282,11 +1132,11 @@ const handleSave = async (e) => {
         replace: true
       });
     }
-    setPendingUploads({
-      businessPhotos: null,
-      legalDocs: null,
-      marketingDocs: null
-    });
+    // setPendingUploads({
+    //   businessPhotos: null,
+    //   legalDocs: null,
+    //   marketingDocs: null
+    // });
     // Refresh the data
     if (proposalId) {
       await fetchProposalData(proposalId);
@@ -1406,12 +1256,12 @@ return (
         <form onSubmit={handleSave}>
           <ConfidentialInfo formData={formData} setFormData={setFormData} errors={errors} />
           <BusinessInfo formData={formData} setFormData={setFormData} />
-          <DocumentUpload 
+          {/* <DocumentUpload 
             formData={formData} 
             setFormData={setFormData} 
             pendingUploads={pendingUploads}
             setPendingUploads={setPendingUploads}
-          />
+          /> */}
           <TermsAndConditions 
             formData={formData} 
             setFormData={setFormData} 
